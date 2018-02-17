@@ -12,9 +12,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MainControllerActivity extends AppCompatActivity {
 
     LinearLayout groupsLinearLayout;
+    List<Group> groupsList;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,19 +28,39 @@ public class MainControllerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_maincontroller);
 
         groupsLinearLayout = findViewById(R.id.groupsLinearLayout);
+
+        dbHelper = new DBHelper(this);
+        groupsList = new ArrayList<>();
+        createGroups();
         createGroupCardViews();
     }
 
+    private void createGroups() {
+        dbHelper.addLight(new Light("AAAAAA", "Bed","1|2"));
+        dbHelper.addLight(new Light("BBBBBB", "Desk","1|2"));
+        dbHelper.addLight(new Light("CCCCCC", "Dinner table","2|3"));
+        dbHelper.addLight(new Light("DDDDDD", "Sink","4"));
+
+        dbHelper.addGroup(new Group(1, "Bedroom","#FFFF00",1, new ArrayList<String>(Arrays.asList("AAAAAA|BBBBBB"))));
+        dbHelper.addGroup(new Group(2, "Party", "#00FFFF", 2, new ArrayList<String>(Arrays.asList("AAAAAA|BBBBBB|CCCCCC"))));
+        dbHelper.addGroup(new Group(3, "Kitchen","#00FFFF", 2, new ArrayList<String>(Arrays.asList("CCCCCC|DDDDDD"))));
+
+        dbHelper.addScene(new Scene(1, "Cozy", "#FFFF00", 75));
+        dbHelper.addScene(new Scene(2, "Artic Cool", "#00FFFF", 75));
+
+        groupsList = dbHelper.getAllGroups();
+    }
+
     private void createGroupCardViews() {
-        int numCardViews = 3;
-        String[] colors = new String[]{"#abcdef", "#123345", "#ab2301"};
-        String[] scenes = new String[]{"Cozy night", "Savannah warm", "Cool blue"};
+        int numCardViews = groupsList.size();
 
         LinearLayout.LayoutParams layoutParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(16, 16, 16, 16);
 
         for (int i = 0; i < numCardViews; i++) {
+            Group group = groupsList.get(i);
+
             CardView cv = new CardView(this);
             cv.setLayoutParams(layoutParams);
             // Set CardView corner radius
@@ -42,18 +68,17 @@ public class MainControllerActivity extends AppCompatActivity {
             // Set cardView content padding
             cv.setContentPadding(15, 15, 15, 15);
             // Set a background color for CardView
-            cv.setCardBackgroundColor(Color.parseColor(colors[i]));
-            // Set the CardView maximum elevation
-            cv.setMaxCardElevation(15);
+            cv.setCardBackgroundColor(Color.parseColor(group.getColor()));
             // Set CardView elevation
-            cv.setCardElevation(9);
+            cv.setCardElevation(15);
+
             final TextView groupName = new TextView(this);
             groupName.setLayoutParams(layoutParams);
-            groupName.setText("Bedroom");
+            groupName.setText(group.getName());
 
             final TextView sceneName = new TextView(this);
             sceneName.setLayoutParams(layoutParams);
-            sceneName.setText(scenes[i] + " Status: On");
+            sceneName.setText("Scene: " + dbHelper.getScene(group.getSceneID()).getName() + " Status: On");
 
             View horizontalLine = new View(this);
             horizontalLine.setBackgroundColor(Color.BLACK);
@@ -71,11 +96,11 @@ public class MainControllerActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Pair<View, String> pair1 = Pair.create((View)groupName, getString(R.string.transition_name_group));
-                        Pair<View, String> pair2 = Pair.create((View)sceneName, getString(R.string.transition_name_scene));
+                        Pair<View, String> pair1 = Pair.create((View) groupName, getString(R.string.transition_name_group));
+                        Pair<View, String> pair2 = Pair.create((View) sceneName, getString(R.string.transition_name_scene));
                         ActivityOptionsCompat options = ActivityOptionsCompat.
                                 makeSceneTransitionAnimation(MainControllerActivity.this, pair1, pair2);
-                        startActivity(new Intent(MainControllerActivity.this, GroupsActivity.class),options.toBundle());
+                        startActivity(new Intent(MainControllerActivity.this, GroupsActivity.class), options.toBundle());
 
                     } else
                         startActivity(new Intent(MainControllerActivity.this, GroupsActivity.class));
