@@ -41,9 +41,9 @@ public class MainControllerActivity extends AppCompatActivity {
         dbHelper.addLight(new Light("CCCCCC", "Dinner table","2|3"));
         dbHelper.addLight(new Light("DDDDDD", "Sink","4"));
 
-        dbHelper.addGroup(new Group(1, "Bedroom","#FFFF00",1, new ArrayList<String>(Arrays.asList("AAAAAA|BBBBBB"))));
-        dbHelper.addGroup(new Group(2, "Party", "#00FFFF", 2, new ArrayList<String>(Arrays.asList("AAAAAA|BBBBBB|CCCCCC"))));
-        dbHelper.addGroup(new Group(3, "Kitchen","#00FFFF", 2, new ArrayList<String>(Arrays.asList("CCCCCC|DDDDDD"))));
+        dbHelper.addGroup(new Group(1, "Bedroom","#FFFF00",1, DBHelper.createStringListfromString("AAAAAA|BBBBBB")));
+        dbHelper.addGroup(new Group(2, "Party", "#00FFFF", 2, DBHelper.createStringListfromString("AAAAAA|BBBBBB|CCCCCC")));
+        dbHelper.addGroup(new Group(3, "Kitchen","#00FFFF", 2, DBHelper.createStringListfromString("CCCCCC|DDDDDD")));
 
         dbHelper.addScene(new Scene(1, "Cozy", "#FFFF00", 75));
         dbHelper.addScene(new Scene(2, "Artic Cool", "#00FFFF", 75));
@@ -92,6 +92,12 @@ public class MainControllerActivity extends AppCompatActivity {
             }
 
             LinearLayout ln = new LinearLayout(this);
+
+            final Intent groupIntent = new Intent(MainControllerActivity.this, GroupsActivity.class);
+            groupIntent.putExtra("GroupID",group.getGroupID());
+            groupIntent.putExtra("SceneID",group.getSceneID());
+            groupIntent.putExtra("Color",group.getColor());
+
             ln.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -100,10 +106,10 @@ public class MainControllerActivity extends AppCompatActivity {
                         Pair<View, String> pair2 = Pair.create((View) sceneName, getString(R.string.transition_name_scene));
                         ActivityOptionsCompat options = ActivityOptionsCompat.
                                 makeSceneTransitionAnimation(MainControllerActivity.this, pair1, pair2);
-                        startActivity(new Intent(MainControllerActivity.this, GroupsActivity.class), options.toBundle());
+                        startActivity(groupIntent, options.toBundle());
 
                     } else
-                        startActivity(new Intent(MainControllerActivity.this, GroupsActivity.class));
+                        startActivity(groupIntent);
                 }
             });
             ln.setOrientation(LinearLayout.VERTICAL);

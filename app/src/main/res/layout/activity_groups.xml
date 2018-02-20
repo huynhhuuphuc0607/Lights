@@ -8,6 +8,7 @@
     tools:context="com.phantasic7.projects.lights.GroupsActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/groupAppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:fitsSystemWindows="true"
@@ -62,9 +63,14 @@
                 android:transitionName="@string/transition_name_scene"/>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
-<android.support.v4.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-</android.support.v4.widget.NestedScrollView>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+            <ListView
+                android:id="@+id/lightsListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>
