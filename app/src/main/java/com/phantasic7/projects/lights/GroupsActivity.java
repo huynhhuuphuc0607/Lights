@@ -1,12 +1,18 @@
 package com.phantasic7.projects.lights;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,31 +20,32 @@ import java.util.List;
 
 public class GroupsActivity extends AppCompatActivity {
 
+    CircularProgressBar brightnessProgressBar;
     TextView groupNameTextView;
     TextView sceneNameTextView;
+    TextView brightnessTextView;
     AppBarLayout groupAppBarLayout;
-    ListView lightsListView;
-    ImageView lightImageView;
-    TextView lightTextView;
+    RecyclerView groupRecyclerView;
+    RecyclerView.Adapter mRecyclerViewAdapter;
+    RecyclerView.LayoutManager mRecyclerViewLayoutManager;
 
     long groupId;
     String color;
     long sceneId;
 
     DBHelper mDBHelper;
-    LightAdapter mLightAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups);
 
+        brightnessProgressBar = findViewById(R.id.brightnessProgressBar);
         groupNameTextView = findViewById(R.id.groupNameTextView);
         sceneNameTextView = findViewById(R.id.sceneNameTextView);
+        brightnessTextView = findViewById(R.id.brightnessTextView);
         groupAppBarLayout = findViewById(R.id.groupAppBarLayout);
-        lightsListView = findViewById(R.id.lightsListView);
-
-        lightTextView = findViewById(R.id.lightTextView);
+        groupRecyclerView = findViewById(R.id.groupRecyclerView);
 
         mDBHelper = new DBHelper(this);
 
@@ -51,13 +58,27 @@ public class GroupsActivity extends AppCompatActivity {
         sceneNameTextView.setText(mDBHelper.getScene(sceneId).getName());
         groupAppBarLayout.setBackgroundColor(Color.parseColor(color));
 
+        animateBrightnessProgressBar();
         createLightCardViews();
     }
 
     private void createLightCardViews()
     {
         List<Light> lights = mDBHelper.getAllLights(groupId);
-        mLightAdapter = new LightAdapter(this, R.layout.light_one_row, lights);
-        lightsListView.setAdapter(mLightAdapter);
+        mRecyclerViewLayoutManager = new LinearLayoutManager(this);
+        groupRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
+        mRecyclerViewAdapter = new LightAdapter(this,R.layout.light_one_row, lights, color);
+        groupRecyclerView.setAdapter(mRecyclerViewAdapter);
     }
+
+    private void animateBrightnessProgressBar()
+    {
+//        ProgressBarAnimation anim = new ProgressBarAnimation(brightnessProgressBar, 0, 100);
+//        anim.setDuration(1000);
+//        brightnessProgressBar.startAnimation(anim);
+        brightnessProgressBar.setColor(Color.WHITE);
+        brightnessProgressBar.animateProgress(brightnessTextView, brightnessProgressBar.getProgress(), 75);
+    }
+
+
 }

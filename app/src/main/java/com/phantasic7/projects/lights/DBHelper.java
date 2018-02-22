@@ -142,6 +142,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.close();
     }
+
+    public void deleteAllLights() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(LIGHT_DATABASE_TABLE, null, null);
+        db.close();
+    }
     //--------------------------Lights ends here--------------------------
 
     //--------------------------Groups starts here--------------------------
@@ -198,6 +205,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return groups;
     }
+
+    public void deleteAllGroups() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(GROUP_DATABASE_TABLE, null, null);
+        db.close();
+    }
     //--------------------------Groups ends here--------------------------
 
     //--------------------------Scenes starts here--------------------------
@@ -229,6 +243,13 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(FIELD_SCENE_BRIGHTNESS, scene.getBrightness());
         db.insert(SCENE_DATABASE_TABLE, null, values);
 
+        db.close();
+    }
+
+    public void deleteAllScenes() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(SCENE_DATABASE_TABLE, null, null);
         db.close();
     }
     //--------------------------Scenes ends here--------------------------
