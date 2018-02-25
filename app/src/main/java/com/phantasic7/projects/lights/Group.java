@@ -15,6 +15,7 @@ public class Group {
     private String mColor;
     private long mSceneID;
     private List<String> mLightIDs;
+    private int mBrightness;
 
     public Group(int groupID, String name) {
         mGroupID = groupID;
@@ -24,12 +25,13 @@ public class Group {
     }
 
     //completed constructor
-    public Group(long groupID, String name, String color, long sceneID, List<String> lightIDs) {
+    public Group(long groupID, String name, String color, long sceneID, List<String> lightIDs, int brightness) {
         mGroupID = groupID;
         mName = name;
         mColor = color;
         mSceneID = sceneID;
         mLightIDs = lightIDs;
+        mBrightness = brightness;
     }
 
     public long getGroupID() {
@@ -76,5 +78,13 @@ public class Group {
     public void removeLightID(String lightID)
     {
         mLightIDs.remove(mLightIDs.indexOf(lightID));
+    }
+
+    public int getBrightness() {
+        return mBrightness;
+    }
+
+    public void setBrightness(int brightness) {
+        mBrightness = brightness;
     }
 }

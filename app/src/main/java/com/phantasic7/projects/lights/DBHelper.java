@@ -17,7 +17,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
     private Context mContext;
     static final String DATABASE_NAME = "Lights";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String LIGHT_DATABASE_TABLE = "Lights";
     private static final String GROUP_DATABASE_TABLE = "Groups";
@@ -34,6 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String FIELD_GROUP_COLOR = "group_color";
     private static final String FIELD_GROUP_SCENEID = "group_scene_id";
     private static final String FIELD_GROUP_LIGHTIDS = "group_light_ids";
+    private static final String FIELD_GROUP_BRIGHTNESS = "group_brightness";
 
     //Scenes
     private static final String FIELD_SCENE_SCENEID = "scene_id";
@@ -60,7 +61,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + FIELD_GROUP_NAME + " TEXT, "
                 + FIELD_GROUP_COLOR + " TEXT, "
                 + FIELD_GROUP_SCENEID + " INTEGER, "
-                + FIELD_GROUP_LIGHTIDS + " TEXT"
+                + FIELD_GROUP_LIGHTIDS + " TEXT, "
+                + FIELD_GROUP_BRIGHTNESS +" INTEGER"
                 + ")";
         db.execSQL(createDatabase);
 
@@ -157,7 +159,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(GROUP_DATABASE_TABLE, new String[]{FIELD_GROUP_GROUPID, FIELD_GROUP_NAME,
-                        FIELD_GROUP_COLOR,FIELD_GROUP_SCENEID, FIELD_GROUP_LIGHTIDS},
+                        FIELD_GROUP_COLOR,FIELD_GROUP_SCENEID, FIELD_GROUP_LIGHTIDS, FIELD_GROUP_BRIGHTNESS},
                 FIELD_GROUP_GROUPID + " = ?", new String[]{groupID+""},
                 null,null,null);
 
@@ -165,7 +167,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if(cursor != null && cursor.getCount() != 0) {
             cursor.moveToFirst();
             group = new Group(cursor.getLong(0),cursor.getString(1),cursor.getString(2),
-                    cursor.getLong(3), createStringListfromString(cursor.getString(4)));
+                    cursor.getLong(3), createStringListfromString(cursor.getString(4)), cursor.getInt(5));
         }
         return group;
     }
@@ -178,6 +180,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(FIELD_GROUP_COLOR, group.getColor());
         values.put(FIELD_GROUP_SCENEID, group.getSceneID());
         values.put(FIELD_GROUP_LIGHTIDS, createStringfromStringList(group.getLightIDs()));
+        values.put(FIELD_GROUP_BRIGHTNESS, group.getBrightness());
         db.insert(GROUP_DATABASE_TABLE, null, values);
 
         db.close();
@@ -189,13 +192,13 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Group> groups = new ArrayList<>();
 
         Cursor cursor = db.query(GROUP_DATABASE_TABLE, new String[]{FIELD_GROUP_GROUPID, FIELD_GROUP_NAME,
-                        FIELD_GROUP_COLOR, FIELD_GROUP_SCENEID, FIELD_GROUP_LIGHTIDS},
+                        FIELD_GROUP_COLOR, FIELD_GROUP_SCENEID, FIELD_GROUP_LIGHTIDS, FIELD_GROUP_BRIGHTNESS},
                 null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
                 Group group = new Group(cursor.getLong(0), cursor.getString(1),cursor.getString(2),
-                        cursor.getLong(3),createStringListfromString(cursor.getString(4)));
+                        cursor.getLong(3),createStringListfromString(cursor.getString(4)), cursor.getInt(5));
                 groups.add(group);
             } while (cursor.moveToNext());
         }
