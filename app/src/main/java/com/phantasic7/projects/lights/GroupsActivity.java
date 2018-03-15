@@ -1,21 +1,14 @@
 package com.phantasic7.projects.lights;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.animation.AlphaAnimation;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GroupsActivity extends AppCompatActivity {
@@ -58,6 +51,7 @@ public class GroupsActivity extends AppCompatActivity {
         sceneNameTextView.setText(mDBHelper.getScene(sceneId).getName());
         groupAppBarLayout.setBackgroundColor(Color.parseColor(color));
 
+        Utility.changeStatusBarColor(this, color);
         animateBrightnessProgressBar();
         createLightCardViews();
     }
@@ -67,7 +61,7 @@ public class GroupsActivity extends AppCompatActivity {
         List<Light> lights = mDBHelper.getAllLights(groupId);
         mRecyclerViewLayoutManager = new LinearLayoutManager(this);
         groupRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
-        mRecyclerViewAdapter = new LightAdapter(this,R.layout.light_one_row, lights, color);
+        mRecyclerViewAdapter = new LightAdapter(this,R.layout.one_light_row, lights, color);
         groupRecyclerView.setAdapter(mRecyclerViewAdapter);
     }
 

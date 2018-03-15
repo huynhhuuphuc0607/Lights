@@ -3,4 +3,5 @@
 
     <string name="transition_name_group">GroupName</string>
     <string name="transition_name_scene">SceneName</string>
+    <string name="search">Search</string>
 </resources>
