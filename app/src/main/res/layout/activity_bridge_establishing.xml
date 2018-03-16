@@ -82,7 +82,7 @@
             android:id="@+id/searchProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="8dp"/>
+            android:paddingEnd="4dp"/>
 
         <TextView
             android:id="@+id/searchTextView"
@@ -92,6 +92,16 @@
             android:textColor="@android:color/black"
             android:textStyle="bold"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Search"
+        android:enabled="false"
+        android:layout_gravity="center_horizontal"
+        android:onClick="searchForBridges"/>
 
     <Space
         android:layout_width="match_parent"

@@ -56,7 +56,7 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
     private TextView timeTextView;
     private ProgressBar timeProgressBar;
     private CardView pushlinkCardView;
-    private Button abortConnectionButton;
+    private Button searchButton;
 
     private CountDownTimer mCountDownTimer;
 
@@ -72,7 +72,7 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
         pushlinkCardView = findViewById(R.id.pushlinkCardView);
         timeTextView = findViewById(R.id.timeTextView);
         timeProgressBar = findViewById(R.id.timeProgressBar);
-        abortConnectionButton = findViewById(R.id.abortConnectionButton);
+        searchButton = findViewById(R.id.searchButton);
 
         Persistence.setStorageLocation(getFilesDir().getAbsolutePath(), "HueQuickStart");
         HueLog.setConsoleLogLevel(HueLog.LogLevel.INFO);
@@ -99,10 +99,10 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
             //set mBridgeDiscovery to null to prevent stopBridgeDiscovery from stopping it
             mBridgeDiscovery = null;
             if (returnCode == ReturnCode.SUCCESS) {
-                updateUI("Found " + list.size() + " bridge(s)");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        searchButton.setEnabled(true);
                         searchProgressBar.setVisibility(View.GONE);
                         searchTextView.setText("Found " + list.size() + " bridge(s)");
                         brideDiscoveryListView.setAdapter(
@@ -162,7 +162,6 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
                 case CONNECTED:
                     //  updateUI("Connected");
                     break;
-
             }
         }
 
@@ -189,17 +188,11 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
                             }
                             triggerPushlinkCardViewAnimation(false);
                             searchTextView.setText("Connection established");
-
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent(BridgeEstablishingActivity.this, MainControllerActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            },500);
+                            searchProgressBar.setVisibility(View.GONE);
+                            startActivity(new Intent(BridgeEstablishingActivity.this, MainControllerActivity.class));
                         }
                     });
+
                     break;
                 case LIGHTS_AND_GROUPS:
                     // updateUI("lights and groups ");
@@ -294,6 +287,10 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
     }
 
     public void searchForBridges(View v) {
+        searchButton.setEnabled(false);
+        searchProgressBar.setVisibility(View.VISIBLE);
+        searchTextView.setText("Searching for bridges...");
+        brideDiscoveryListView.setAdapter(null);
         startBridgeDiscovery();
     }
 

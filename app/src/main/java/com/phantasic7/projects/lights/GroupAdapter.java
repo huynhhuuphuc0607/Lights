@@ -63,6 +63,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         TextView groupNameTextView = holder.groupNameTextView;
         final SeekBar groupBrightnessSeekBar = holder.groupBrightnessSeekBar;
         final Switch groupSwitch = holder.groupSwitch;
+        final TextView groupBrightnessTextView = holder.groupBrightnessTextView;
 
         //imageView
         groupImageView.setImageResource(R.drawable.ic_bedroom);
@@ -83,6 +84,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         //seekbar
         final int brightness = group.getBrightness();
+        groupBrightnessTextView.setText(brightness*100/254 +"%");
         groupBrightnessSeekBar.getProgressDrawable()
                 .setColorFilter(group.getColor(), PorterDuff.Mode.SRC_IN);
         groupBrightnessSeekBar.getThumb().setColorFilter(group.getColor(), PorterDuff.Mode.SRC_IN);
@@ -97,8 +99,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             @Override
             public void onProgressChanged(SeekBar seekBar, final int i, boolean b) {
                 if(System.currentTimeMillis() - lastTime > 99) {
-                    lightState.setBrightness(i * 2);
-
+                    lightState.setBrightness(i);
+                    groupBrightnessTextView.setText(i*100/254 + "%");
                     hueGroup.apply(lightState, new BridgeResponseCallback() {
                         @Override
                         public void handleCallback(Bridge bridge, ReturnCode returnCode, List<ClipResponse> list, List<HueError> list1) {
@@ -117,8 +119,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                lightState.setBrightness(lastBri * 2);
+                lightState.setBrightness(lastBri);
 
+                groupBrightnessTextView.setText(lastBri*100/254 + "%");
                 hueGroup.apply(lightState, new BridgeResponseCallback() {
                     @Override
                     public void handleCallback(Bridge bridge, ReturnCode returnCode, List<ClipResponse> list, List<HueError> list1) {
@@ -139,6 +142,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         public TextView groupNameTextView;
         public Switch groupSwitch;
         public SeekBar groupBrightnessSeekBar;
+        public TextView groupBrightnessTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -146,6 +150,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             groupNameTextView = itemView.findViewById(R.id.groupNameTextView);
             groupSwitch = itemView.findViewById(R.id.groupSwitch);
             groupBrightnessSeekBar = itemView.findViewById(R.id.groupBrightnessSeekBar);
+            groupBrightnessTextView = itemView.findViewById(R.id.groupBrightnessTextView);
         }
     }
 }

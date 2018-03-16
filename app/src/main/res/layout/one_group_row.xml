@@ -68,8 +68,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:max="127"
-                    android:progress="76"/>
+                    android:max="254"
+                    android:min="1"
+                    android:progress="100"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -106,6 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="60%"
                     />
             </LinearLayout>
@@ -126,6 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="Edit"
                     />
             </LinearLayout>
@@ -135,7 +138,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:onClick="gotoColorController">
 
                 <ImageView
                     android:layout_width="25dp"
@@ -146,6 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="Color"
                     />
             </LinearLayout>
@@ -166,6 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="Manage"
                     />
             </LinearLayout>
