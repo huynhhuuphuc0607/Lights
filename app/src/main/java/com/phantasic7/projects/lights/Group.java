@@ -13,7 +13,7 @@ import static java.lang.Math.pow;
  */
 
 public class Group {
-    private long mGroupID;
+    private int mGroupID;
     private String mName;
   //  private String mColor;
     private long mSceneID;
@@ -26,7 +26,7 @@ public class Group {
     private float mYCor;
     private int mColor;
 
-    public Group(long groupID) {
+    public Group(int groupID) {
         mGroupID = groupID;
     }
 
@@ -66,7 +66,7 @@ public class Group {
     }
 
     //complete constructor
-    public Group(long groupID, String name, String color, long sceneID, List<String> lightIDs, int brightness) {
+    public Group(int groupID, String name, String color, long sceneID, List<String> lightIDs, int brightness) {
         mGroupID = groupID;
         mName = name;
        // mColor = color;
@@ -75,7 +75,7 @@ public class Group {
         mBrightness = brightness;
     }
 
-    public long getGroupID() {
+    public int getGroupID() {
         return mGroupID;
     }
 

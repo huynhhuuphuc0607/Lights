@@ -166,7 +166,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Group group = null;
         if(cursor != null && cursor.getCount() != 0) {
             cursor.moveToFirst();
-            group = new Group(cursor.getLong(0),cursor.getString(1),cursor.getString(2),
+            group = new Group(cursor.getInt(0),cursor.getString(1),cursor.getString(2),
                     cursor.getLong(3), createStringListfromString(cursor.getString(4)), cursor.getInt(5));
         }
         return group;
@@ -197,7 +197,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Group group = new Group(cursor.getLong(0), cursor.getString(1),cursor.getString(2),
+                Group group = new Group(cursor.getInt(0), cursor.getString(1),cursor.getString(2),
                         cursor.getLong(3),createStringListfromString(cursor.getString(4)), cursor.getInt(5));
                 groups.add(group);
             } while (cursor.moveToNext());

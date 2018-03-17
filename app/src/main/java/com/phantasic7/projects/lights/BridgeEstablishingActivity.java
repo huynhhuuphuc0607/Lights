@@ -136,7 +136,12 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
                     break;
 
                 case COULD_NOT_CONNECT:
-                    updateUI("Could not connect.");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            searchButton.setEnabled(true);
+                        }
+                    });
                     break;
 
                 case CONNECTION_LOST:

@@ -17,6 +17,7 @@ import com.philips.lighting.hue.sdk.wrapper.domain.Bridge;
 import com.philips.lighting.hue.sdk.wrapper.domain.HueError;
 import com.philips.lighting.hue.sdk.wrapper.domain.ReturnCode;
 import com.philips.lighting.hue.sdk.wrapper.domain.clip.ClipResponse;
+import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightPoint;
 import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightState;
 
 import org.json.JSONArray;
@@ -164,5 +165,14 @@ public class LibraryLoader extends Application {
             }
         });
 
+    }
+
+    public static List<LightPoint> getLights(List<String> lightIds)
+    {
+        List<LightPoint>lights = new ArrayList<>();
+        int size = lightIds.size();
+        for (int i = 0; i < lightIds.size(); i++)
+            lights.add(LibraryLoader.mBridge.getBridgeState().getLightPoint(lightIds.get(i) + ""));
+        return lights;
     }
 }

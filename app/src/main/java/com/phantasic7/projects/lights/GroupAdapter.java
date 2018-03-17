@@ -9,17 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.philips.lighting.hue.sdk.wrapper.connection.BridgeResponseCallback;
-import com.philips.lighting.hue.sdk.wrapper.connection.HueHTTPResponse;
-import com.philips.lighting.hue.sdk.wrapper.connection.RequestCallback;
-import com.philips.lighting.hue.sdk.wrapper.domain.Bridge;
-import com.philips.lighting.hue.sdk.wrapper.domain.HueError;
-import com.philips.lighting.hue.sdk.wrapper.domain.ReturnCode;
-import com.philips.lighting.hue.sdk.wrapper.domain.clip.ClipResponse;
+import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightConfiguration;
+import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightPoint;
 import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightState;
 
 import java.util.List;
@@ -39,11 +35,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     private List<Group> mGroups;
     private long lastTime = 0;
     private int lastBri;
+    private LightState mLightState;
+    private LightConfiguration mLightConfiguration;
 
     public GroupAdapter(Context context, int resource, List<Group> groups) {
         mContext = context;
         resID = resource;
         mGroups = groups;
+
+        mLightState = new LightState();
         //  mGroups.remove(0);
     }
 
@@ -64,6 +64,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         final SeekBar groupBrightnessSeekBar = holder.groupBrightnessSeekBar;
         final Switch groupSwitch = holder.groupSwitch;
         final TextView groupBrightnessTextView = holder.groupBrightnessTextView;
+        final LinearLayout colorLinearLayout = holder.colorLinearLayout;
 
         //imageView
         groupImageView.setImageResource(R.drawable.ic_bedroom);
@@ -79,38 +80,51 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 LibraryLoader.toggleGroup((int) group.getGroupID(), b);
                 groupBrightnessSeekBar.setEnabled(b);
+                mGroups.get(position).setOn(b);
+                colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +b);
             }
         });
 
         //seekbar
         final int brightness = group.getBrightness();
-        groupBrightnessTextView.setText(brightness*100/254 +"%");
+        groupBrightnessTextView.setText(brightness * 100 / 254 + "%");
         groupBrightnessSeekBar.getProgressDrawable()
                 .setColorFilter(group.getColor(), PorterDuff.Mode.SRC_IN);
         groupBrightnessSeekBar.getThumb().setColorFilter(group.getColor(), PorterDuff.Mode.SRC_IN);
         groupBrightnessSeekBar.setProgress(brightness);
         final com.philips.lighting.hue.sdk.wrapper.domain.resource.Group hueGroup =
                 mBridge.getBridgeState().getGroups().get((int) group.getGroupID());
-        final LightState lightState = new LightState();
-        if(!group.isOn())
+        //  final LightState lightState = new LightState();
+        if (!group.isOn())
             groupBrightnessSeekBar.setEnabled(false);
 
+        final List<LightPoint> lights = LibraryLoader.getLights(group.getLightIDs());
+        final int size = lights.size();
         groupBrightnessSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            LightPoint light;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, final int i, boolean b) {
-                if(System.currentTimeMillis() - lastTime > 99) {
-                    lightState.setBrightness(i);
-                    groupBrightnessTextView.setText(i*100/254 + "%");
-                    hueGroup.apply(lightState, new BridgeResponseCallback() {
-                        @Override
-                        public void handleCallback(Bridge bridge, ReturnCode returnCode, List<ClipResponse> list, List<HueError> list1) {
-
-                        }
-                    });
-                    lastTime = System.currentTimeMillis();
+//                if(System.currentTimeMillis() - lastTime > 99) {
+//                    lightState.setBrightness(i);
+//                    groupBrightnessTextView.setText(i*100/254 + "%");
+//                    hueGroup.apply(lightState, new BridgeResponseCallback() {
+//                        @Override
+//                        public void handleCallback(Bridge bridge, ReturnCode returnCode, List<ClipResponse> list, List<HueError> list1) {
+//
+//                        }
+//                    });
+//                    lastTime = System.currentTimeMillis();
+//                }
+//                else
+//                    lastBri = i;
+                for (int j = 0; j < size; j++) {
+                    light = lights.get(j);
+                    mLightConfiguration = light.getLightConfiguration();
+                    mLightState.setBrightness(i);
+                    light.updateState(mLightState);
                 }
-                else
-                    lastBri = i;
+                groupBrightnessTextView.setText(i * 100 / 254 + "%");
             }
 
             @Override
@@ -119,17 +133,20 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                lightState.setBrightness(lastBri);
+//                lightState.setBrightness(lastBri);
+//
+//                groupBrightnessTextView.setText(lastBri*100/254 + "%");
+//                hueGroup.apply(lightState, new BridgeResponseCallback() {
+//                    @Override
+//                    public void handleCallback(Bridge bridge, ReturnCode returnCode, List<ClipResponse> list, List<HueError> list1) {
+//
+//                    }
+//                });
+                mGroups.get(position).setBrightness(seekBar.getProgress());
 
-                groupBrightnessTextView.setText(lastBri*100/254 + "%");
-                hueGroup.apply(lightState, new BridgeResponseCallback() {
-                    @Override
-                    public void handleCallback(Bridge bridge, ReturnCode returnCode, List<ClipResponse> list, List<HueError> list1) {
-
-                    }
-                });
             }
         });
+        colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn());
     }
 
     @Override
@@ -144,6 +161,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         public SeekBar groupBrightnessSeekBar;
         public TextView groupBrightnessTextView;
 
+        public LinearLayout colorLinearLayout;
+
         public ViewHolder(View itemView) {
             super(itemView);
             groupImageView = itemView.findViewById(R.id.groupImageView);
@@ -151,6 +170,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             groupSwitch = itemView.findViewById(R.id.groupSwitch);
             groupBrightnessSeekBar = itemView.findViewById(R.id.groupBrightnessSeekBar);
             groupBrightnessTextView = itemView.findViewById(R.id.groupBrightnessTextView);
+
+            colorLinearLayout = itemView.findViewById(R.id.colorLinearLayout);
         }
     }
 }
