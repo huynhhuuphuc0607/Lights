@@ -50,7 +50,7 @@ public class Group {
         mYCor = y;
 
         float z = 1.0f - x - y;
-        float Y = brightness; // The given brightness value
+        float Y = 254; // The given brightness value
         float X = (Y / y) * x;
         float Z = (Y / y) * z;
         float r =  X * 1.656492f - Y * 0.354851f - Z * 0.255038f;
@@ -59,10 +59,7 @@ public class Group {
         r = r <= 0.0031308f ? 12.92f * r : (1.0f + 0.055f) * (float)pow(r, (1.0f / 2.4f)) - 0.055f;
         g = g <= 0.0031308f ? 12.92f * g : (1.0f + 0.055f) * (float)pow(g, (1.0f / 2.4f)) - 0.055f;
         b = b <= 0.0031308f ? 12.92f * b : (1.0f + 0.055f) * (float)pow(b, (1.0f / 2.4f)) - 0.055f;
-        mColor = 0xff000000 |
-                ((int) (r   * 255.0f + 0.5f) << 16) |
-                ((int) (g * 255.0f + 0.5f) <<  8) |
-                (int) (b  * 255.0f + 0.5f);
+        mColor = ColorUtils.XYZToColor(r,g,b);
     }
 
     //complete constructor

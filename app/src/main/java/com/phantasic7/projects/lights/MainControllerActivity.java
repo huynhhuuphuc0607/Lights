@@ -116,7 +116,7 @@ public class MainControllerActivity extends AppCompatActivity {
         if(Boolean.parseBoolean(minitags[2])) {
             intent.putExtra("position", Integer.parseInt(minitags[0]));
             intent.putExtra("groupid", Integer.parseInt(minitags[1]));
-
+            intent.putExtra("color",Integer.parseInt(minitags[3]));
             intent.putExtra("group?", true);
             startActivityForResult(intent, ColorControllerActivity.GROUP_REQUEST_CODE);
         }

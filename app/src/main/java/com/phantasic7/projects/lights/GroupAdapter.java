@@ -81,7 +81,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                 LibraryLoader.toggleGroup((int) group.getGroupID(), b);
                 groupBrightnessSeekBar.setEnabled(b);
                 mGroups.get(position).setOn(b);
-                colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +b);
+                colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
             }
         });
 
@@ -143,10 +143,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 //                    }
 //                });
                 mGroups.get(position).setBrightness(seekBar.getProgress());
-
+                colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
             }
         });
-        colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn());
+        colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
     }
 
     @Override
