@@ -11,6 +11,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightPoint;
+
 import java.util.List;
 
 /**
@@ -20,10 +22,10 @@ import java.util.List;
 public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder> {
     Context mContext;
     int resID;
-    List<Light> mLights;
-    String color;
+    List<LightPoint> mLights;
+    int color;
 
-    public LightAdapter(Context context, int resID, List<Light> lightList, String color) {
+    public LightAdapter(Context context, int resID, List<LightPoint> lightList, int color) {
         mContext = context;
         this.resID = resID;
         mLights = lightList;
@@ -42,11 +44,11 @@ public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(LightAdapter.ViewHolder holder, int position) {
-        Light light = mLights.get(position);
+        LightPoint light = mLights.get(position);
 
         TextView lightTextView = holder.lightTextView;
         lightTextView.setText(light.getName());
-        lightTextView.setTextColor(Color.parseColor(color));
+        lightTextView.setTextColor(color);
 
         ImageView lightImageView = holder.lightImageView;
         lightImageView.setImageResource(R.drawable.light);

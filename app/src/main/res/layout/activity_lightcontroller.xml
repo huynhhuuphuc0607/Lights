@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.phantasic7.projects.lights.GroupsActivity">
+    tools:context="com.phantasic7.projects.lights.LightControllerActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/groupAppBarLayout"
@@ -87,6 +87,7 @@
         android:fitsSystemWindows="true"
         android:background="#eeeeee"
         android:padding="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layoutAnimation="@anim/light_row_animation"/>
 
 </android.support.design.widget.CoordinatorLayout>

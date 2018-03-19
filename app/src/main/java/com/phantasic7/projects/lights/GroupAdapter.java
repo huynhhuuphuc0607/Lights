@@ -65,7 +65,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         final Switch groupSwitch = holder.groupSwitch;
         final TextView groupBrightnessTextView = holder.groupBrightnessTextView;
         final LinearLayout colorLinearLayout = holder.colorLinearLayout;
-
+        final LinearLayout manageLinearLayout = holder.manageLinearLayout;
         //imageView
         groupImageView.setImageResource(R.drawable.ic_bedroom);
         //textView
@@ -82,6 +82,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                 groupBrightnessSeekBar.setEnabled(b);
                 mGroups.get(position).setOn(b);
                 colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
+                manageLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor()+"|"+group.getBrightness());
             }
         });
 
@@ -144,9 +145,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 //                });
                 mGroups.get(position).setBrightness(seekBar.getProgress());
                 colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
+                manageLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor()+"|"+group.getBrightness());
             }
         });
         colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
+        manageLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor()+"|"+group.getBrightness());
     }
 
     @Override
@@ -162,6 +165,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         public TextView groupBrightnessTextView;
 
         public LinearLayout colorLinearLayout;
+        public LinearLayout manageLinearLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -172,6 +176,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             groupBrightnessTextView = itemView.findViewById(R.id.groupBrightnessTextView);
 
             colorLinearLayout = itemView.findViewById(R.id.colorLinearLayout);
+            manageLinearLayout = itemView.findViewById(R.id.manageLinearLayout);
         }
     }
 }

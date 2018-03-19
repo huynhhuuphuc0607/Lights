@@ -21,7 +21,7 @@ public class CircularProgressBar extends View {
     private float strokeWidth = 4;
     private float progress = 0;
     private int min = 0;
-    private int max = 10000;
+    private int max = 25400;
     /**
      * Start the progress at 12 o'clock
      */

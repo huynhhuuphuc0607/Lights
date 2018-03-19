@@ -3,31 +3,20 @@ package com.phantasic7.projects.lights;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.philips.lighting.hue.sdk.wrapper.connection.BridgeConnectionType;
-import com.philips.lighting.hue.sdk.wrapper.connection.HueHTTPResponse;
-import com.philips.lighting.hue.sdk.wrapper.connection.RequestCallback;
 import com.philips.lighting.hue.sdk.wrapper.discovery.BridgeDiscovery;
 import com.philips.lighting.hue.sdk.wrapper.discovery.BridgeDiscoveryResult;
-import com.philips.lighting.hue.sdk.wrapper.domain.HueError;
-import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightPoint;
-import com.philips.lighting.hue.sdk.wrapper.utilities.HueColor;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.markormesher.android_fab.FloatingActionButton;
@@ -102,25 +91,23 @@ public class MainControllerActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
         groupsList = LibraryLoader.getGroups();
 
-        Utility.changeStatusBarIconColor(this, true);
+        Utils.changeStatusBarIconColor(this, true);
         groupRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mGroupAdapter = new GroupAdapter(this, R.layout.one_group_row, groupsList);
         groupRecyclerView.setAdapter(mGroupAdapter);
     }
 
-    public void gotoColorController(View v)
-    {
-        Intent intent = new Intent(MainControllerActivity.this,ColorControllerActivity.class);
-        String tag = (String)v.getTag();
+    public void gotoColorController(View v) {
+        Intent intent = new Intent(MainControllerActivity.this, ColorControllerActivity.class);
+        String tag = (String) v.getTag();
         String[] minitags = tag.split("\\|");
-        if(Boolean.parseBoolean(minitags[2])) {
+        if (Boolean.parseBoolean(minitags[2])) {
             intent.putExtra("position", Integer.parseInt(minitags[0]));
             intent.putExtra("groupid", Integer.parseInt(minitags[1]));
-            intent.putExtra("color",Integer.parseInt(minitags[3]));
+            intent.putExtra("color", Integer.parseInt(minitags[3]));
             intent.putExtra("group?", true);
             startActivityForResult(intent, ColorControllerActivity.GROUP_REQUEST_CODE);
-        }
-        else
+        } else
             new AlertDialog.Builder(MainControllerActivity.this)
                     .setTitle("Help").setMessage("Turn it on before changing color.")
                     .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
@@ -135,12 +122,23 @@ public class MainControllerActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == ColorControllerActivity.GROUP_REQUEST_CODE && resultCode == RESULT_OK)
-        {
-            int position = data.getIntExtra("position",0);
+        if (requestCode == ColorControllerActivity.GROUP_REQUEST_CODE && resultCode == RESULT_OK) {
+            int position = data.getIntExtra("position", 0);
 
-            groupsList.get(position).setColor(data.getIntExtra("color",0));
+            groupsList.get(position).setColor(data.getIntExtra("color", 0));
             mGroupAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void gotoLightController(View v) {
+        Intent intent = new Intent(MainControllerActivity.this, LightControllerActivity.class);
+        String tag = (String) v.getTag();
+        String[] minitags = tag.split("\\|");
+        intent.putExtra("position", Integer.parseInt(minitags[0]));
+        intent.putExtra("groupid", Integer.parseInt(minitags[1]));
+        intent.putExtra("color", Integer.parseInt(minitags[3]));
+        intent.putExtra("group?", true);
+        intent.putExtra("brightness",Integer.parseInt(minitags[4]));
+        startActivity(intent);
     }
 }

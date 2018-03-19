@@ -44,7 +44,8 @@ public class ColorControllerActivity extends AppCompatActivity {
         forGroup = intent.getBooleanExtra("group?",true);
         color = intent.getIntExtra("color",0);
 
-        colorPickerView.setInitialColor(color,true);
+        colorPickerView.setInitialColor(color,false);
+
         if(forGroup) {
             groupPosition = intent.getIntExtra("position",0);
             groupId = intent.getIntExtra("groupid", 0);

@@ -31,6 +31,6 @@ public class ProgressBarAnimation extends Animation {
         super.applyTransformation(interpolatedTime, t);
         float value = from + (to - from) * interpolatedTime;
         mProgressBar.setProgress((int) value);
-        brightnessTextView.setText("Brightness\n" + (int)(value/100)+ "%" );
+        brightnessTextView.setText("Brightness\n" + (int)(value/254)+ "%" );
     }
 }
