@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".ColorControllerActivity">
         </activity>
+        <activity android:name=".RoomEditControllerActivity">
+        </activity>
     </application>
 
 </manifest>

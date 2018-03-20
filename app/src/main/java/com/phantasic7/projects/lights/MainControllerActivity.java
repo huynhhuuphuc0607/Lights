@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -140,5 +142,20 @@ public class MainControllerActivity extends AppCompatActivity {
         intent.putExtra("group?", true);
         intent.putExtra("brightness",Integer.parseInt(minitags[4]));
         startActivity(intent);
+    }
+
+    public void gotoRoomEditController(View v)
+    {
+        Intent intent = new Intent(MainControllerActivity.this, RoomEditControllerActivity.class);
+        String tag = (String) v.getTag();
+        String[] minitags = tag.split("\\|");
+        intent.putExtra("position", Integer.parseInt(minitags[0]));
+        intent.putExtra("groupid", Integer.parseInt(minitags[1]));
+        intent.putExtra("drawableRes", Integer.parseInt(minitags[2]));
+        intent.putExtra("name",minitags[3]);
+        View view = findViewById(Integer.parseInt(minitags[4]));
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainControllerActivity.this,
+                Pair.create(view.findViewById(Integer.parseInt(minitags[5])),getString(R.string.transition_name_group)));
+        startActivity(intent, options.toBundle());
     }
 }

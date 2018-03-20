@@ -3,6 +3,7 @@ package com.phantasic7.projects.lights;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v4.graphics.ColorUtils;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final Group group = mGroups.get(position);
 
+        CardView groupCardView = holder.groupCardView;
         ImageView groupImageView = holder.groupImageView;
         TextView groupNameTextView = holder.groupNameTextView;
         final SeekBar groupBrightnessSeekBar = holder.groupBrightnessSeekBar;
@@ -66,8 +68,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         final TextView groupBrightnessTextView = holder.groupBrightnessTextView;
         final LinearLayout colorLinearLayout = holder.colorLinearLayout;
         final LinearLayout manageLinearLayout = holder.manageLinearLayout;
+        LinearLayout roomEditLinearLayout = holder.roomEditLinearLayout;
+
         //imageView
         groupImageView.setImageResource(R.drawable.ic_bedroom);
+        groupImageView.setTag(R.drawable.ic_bedroom);
         //textView
         groupNameTextView.setText(group.getName());
 
@@ -150,6 +155,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         });
         colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
         manageLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor()+"|"+group.getBrightness());
+        roomEditLinearLayout.setTag(position +"|"+ group.getGroupID() +"|" + groupImageView.getTag() +
+                "|"+group.getName()+"|" +groupCardView.getId()+"|"+ groupNameTextView.getId());
     }
 
     @Override
@@ -158,6 +165,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public CardView groupCardView;
         public ImageView groupImageView;
         public TextView groupNameTextView;
         public Switch groupSwitch;
@@ -166,9 +174,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         public LinearLayout colorLinearLayout;
         public LinearLayout manageLinearLayout;
+        public LinearLayout roomEditLinearLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            groupCardView = itemView.findViewById(R.id.groupCardView);
             groupImageView = itemView.findViewById(R.id.groupImageView);
             groupNameTextView = itemView.findViewById(R.id.groupNameTextView);
             groupSwitch = itemView.findViewById(R.id.groupSwitch);
@@ -177,6 +187,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
             colorLinearLayout = itemView.findViewById(R.id.colorLinearLayout);
             manageLinearLayout = itemView.findViewById(R.id.manageLinearLayout);
+            roomEditLinearLayout = itemView.findViewById(R.id.roomEditLinearLayout);
         }
     }
 }
