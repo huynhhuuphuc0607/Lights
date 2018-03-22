@@ -30,6 +30,8 @@ public class RoomEditControllerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_edit_controller);
 
+        Utils.changeStatusBarIconColor(this, true);
+
         roomTypeNameTextView = findViewById(R.id.roomTypeNameTextView);
         roomtypeRecyclerView = findViewById(R.id.roomtypeRecyclerView);
 

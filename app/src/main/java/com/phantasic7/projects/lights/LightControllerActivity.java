@@ -43,6 +43,8 @@ public class LightControllerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lightcontroller);
 
+        Utils.changeStatusBarIconColor(this, true);
+
         brightnessProgressBar = findViewById(R.id.brightnessProgressBar);
         groupNameTextView = findViewById(R.id.groupNameTextView);
         sceneNameTextView = findViewById(R.id.sceneNameTextView);

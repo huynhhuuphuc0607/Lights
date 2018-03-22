@@ -65,6 +65,7 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge_establishing);
 
+        Utils.changeStatusBarIconColor(this, true);
         searchTextView = findViewById(R.id.searchTextView);
         searchProgressBar = findViewById(R.id.searchProgressBar);
         brideDiscoveryListView = findViewById(R.id.brideDiscoveryListView);
