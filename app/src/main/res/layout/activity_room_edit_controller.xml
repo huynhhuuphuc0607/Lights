@@ -38,7 +38,8 @@
         <Button
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:background="@drawable/ic_create_black_24dp"/>
+            android:background="@drawable/ic_create_black_24dp"
+            android:onClick="rename"/>
     </LinearLayout>
 
     <TextView
@@ -53,6 +54,16 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/roomtypeRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layoutAnimation="@anim/roomtype_item_animation"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="Apply"
+        android:onClick="applyEdit"/>
 </LinearLayout>

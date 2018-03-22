@@ -195,6 +195,7 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
                             searchTextView.setText("Connection established");
                             searchProgressBar.setVisibility(View.GONE);
                             startActivity(new Intent(BridgeEstablishingActivity.this, MainControllerActivity.class));
+                            finish();
                         }
                     });
 

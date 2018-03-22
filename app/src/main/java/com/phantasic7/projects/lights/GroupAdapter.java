@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,6 @@ import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightState;
 
 import java.util.List;
 
-import static com.phantasic7.projects.lights.LibraryLoader.mBridge;
-
 ;
 
 /**
@@ -34,9 +33,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     private Context mContext;
     private int resID;
     private List<Group> mGroups;
-    private long lastTime = 0;
-    private int lastBri;
     private LightState mLightState;
+    private CardView[] cardViews;
     private LightConfiguration mLightConfiguration;
 
     public GroupAdapter(Context context, int resource, List<Group> groups) {
@@ -45,7 +43,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         mGroups = groups;
 
         mLightState = new LightState();
-        //  mGroups.remove(0);
+        Log.i("Phantastic Lights", "" + groups.size());
+        cardViews = new CardView[groups.size()];
     }
 
     @Override
@@ -71,8 +70,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         LinearLayout roomEditLinearLayout = holder.roomEditLinearLayout;
 
         //imageView
-        groupImageView.setImageResource(R.drawable.ic_bedroom);
-        groupImageView.setTag(R.drawable.ic_bedroom);
+        Log.i("Phantastic Lights", "Group class: " + group.getType());
+        int drawableResource = RoomTypeAdapter.getDrawableResouceFromType(group.getType());
+        groupImageView.setImageResource(drawableResource);
+        groupImageView.setTag(drawableResource);
+
         //textView
         groupNameTextView.setText(group.getName());
 
@@ -86,8 +88,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                 LibraryLoader.toggleGroup((int) group.getGroupID(), b);
                 groupBrightnessSeekBar.setEnabled(b);
                 mGroups.get(position).setOn(b);
-                colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
-                manageLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor()+"|"+group.getBrightness());
+                colorLinearLayout.setTag(position + "|" + group.getGroupID() + "|" + group.isOn() + "|" + group.getColor());
+                manageLinearLayout.setTag(position + "|" + group.getGroupID() + "|" + group.isOn() + "|" + group.getColor() + "|" + group.getBrightness());
             }
         });
 
@@ -98,8 +100,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                 .setColorFilter(group.getColor(), PorterDuff.Mode.SRC_IN);
         groupBrightnessSeekBar.getThumb().setColorFilter(group.getColor(), PorterDuff.Mode.SRC_IN);
         groupBrightnessSeekBar.setProgress(brightness);
-        final com.philips.lighting.hue.sdk.wrapper.domain.resource.Group hueGroup =
-                mBridge.getBridgeState().getGroups().get((int) group.getGroupID());
+
         //  final LightState lightState = new LightState();
         if (!group.isOn())
             groupBrightnessSeekBar.setEnabled(false);
@@ -149,14 +150,19 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 //                    }
 //                });
                 mGroups.get(position).setBrightness(seekBar.getProgress());
-                colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
-                manageLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor()+"|"+group.getBrightness());
+                colorLinearLayout.setTag(position + "|" + group.getGroupID() + "|" + group.isOn() + "|" + group.getColor());
+                manageLinearLayout.setTag(position + "|" + group.getGroupID() + "|" + group.isOn() + "|" + group.getColor() + "|" + group.getBrightness());
             }
         });
-        colorLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor());
-        manageLinearLayout.setTag(position + "|" + group.getGroupID()+"|" +group.isOn()+"|" + group.getColor()+"|"+group.getBrightness());
-        roomEditLinearLayout.setTag(position +"|"+ group.getGroupID() +"|" + groupImageView.getTag() +
-                "|"+group.getName()+"|" +groupCardView.getId()+"|"+ groupNameTextView.getId());
+        colorLinearLayout.setTag(position + "|" + group.getGroupID() + "|" + group.isOn() + "|" + group.getColor());
+        manageLinearLayout.setTag(position + "|" + group.getGroupID() + "|" + group.isOn() + "|" + group.getColor() + "|" + group.getBrightness());
+        roomEditLinearLayout.setTag(position + "|" + group.getGroupID() + "|" + groupImageView.getTag() +
+                "|" + group.getName() + "|" + groupCardView.getId() + "|" + groupNameTextView.getId());
+
+        try {
+            cardViews[position] = groupCardView;
+        }catch (Exception e)
+        {}
     }
 
     @Override
@@ -189,5 +195,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             manageLinearLayout = itemView.findViewById(R.id.manageLinearLayout);
             roomEditLinearLayout = itemView.findViewById(R.id.roomEditLinearLayout);
         }
+    }
+
+    public void changeDrawableResource(int position, int drawableResource) {
+        ImageView imageView = cardViews[position].findViewById(R.id.groupImageView);
+        imageView.setImageResource(drawableResource);
+    }
+
+    public CardView getCardView(int position)
+    {
+        return cardViews[position];
     }
 }

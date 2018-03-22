@@ -90,7 +90,7 @@ public class MainControllerActivity extends AppCompatActivity {
             }
         });
 
-        dbHelper = new DBHelper(this);
+       // dbHelper = new DBHelper(this);
         groupsList = LibraryLoader.getGroups();
 
         Utils.changeStatusBarIconColor(this, true);
@@ -126,8 +126,16 @@ public class MainControllerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ColorControllerActivity.GROUP_REQUEST_CODE && resultCode == RESULT_OK) {
             int position = data.getIntExtra("position", 0);
-
             groupsList.get(position).setColor(data.getIntExtra("color", 0));
+            mGroupAdapter.notifyDataSetChanged();
+        }
+        else if(requestCode == RoomEditControllerActivity.EDIT_REQUEST_CODE && resultCode == RESULT_OK)
+        {
+            int position = data.getIntExtra("position", 0);
+            groupsList.get(position).setName(data.getStringExtra("name"));
+            String type = data.getStringExtra("type");
+            if(type!=null)
+                groupsList.get(position).setType(type);
             mGroupAdapter.notifyDataSetChanged();
         }
     }
@@ -143,7 +151,6 @@ public class MainControllerActivity extends AppCompatActivity {
         intent.putExtra("brightness",Integer.parseInt(minitags[4]));
         startActivity(intent);
     }
-
     public void gotoRoomEditController(View v)
     {
         Intent intent = new Intent(MainControllerActivity.this, RoomEditControllerActivity.class);
@@ -153,9 +160,11 @@ public class MainControllerActivity extends AppCompatActivity {
         intent.putExtra("groupid", Integer.parseInt(minitags[1]));
         intent.putExtra("drawableRes", Integer.parseInt(minitags[2]));
         intent.putExtra("name",minitags[3]);
-        View view = findViewById(Integer.parseInt(minitags[4]));
+        View view = mGroupAdapter.getCardView(Integer.parseInt(minitags[0])).findViewById(Integer.parseInt(minitags[4]));
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainControllerActivity.this,
                 Pair.create(view.findViewById(Integer.parseInt(minitags[5])),getString(R.string.transition_name_group)));
-        startActivity(intent, options.toBundle());
+
+        //noinspection RestrictedApi
+        startActivityForResult(intent, RoomEditControllerActivity.EDIT_REQUEST_CODE, options.toBundle());
     }
 }

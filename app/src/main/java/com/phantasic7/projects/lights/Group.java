@@ -15,7 +15,6 @@ import static java.lang.Math.pow;
 public class Group {
     private int mGroupID;
     private String mName;
-  //  private String mColor;
     private long mSceneID;
     private List<String> mLightIDs;
     private int mBrightness;
@@ -25,6 +24,7 @@ public class Group {
     private float mXCor;
     private float mYCor;
     private int mColor;
+    private String mType;
 
     public Group(int groupID) {
         mGroupID = groupID;
@@ -37,7 +37,7 @@ public class Group {
         mLightIDs = new ArrayList<>();
     }
 
-    public Group(int groupID, String name, List<String> lightIDs, boolean on, int brightness, int hue, int sat, float x, float y)
+    public Group(int groupID, String name, List<String> lightIDs, boolean on, int brightness, int hue, int sat, float x, float y, String type)
     {
         mGroupID = groupID;
         mName = name;
@@ -50,6 +50,7 @@ public class Group {
         mYCor = y;
 
         mColor = Utils.XYZToColor(x,y,brightness);
+        mType = type;
     }
 
     //complete constructor
@@ -154,5 +155,13 @@ public class Group {
 
     public void setYCor(float YCor) {
         mYCor = YCor;
+    }
+
+    public String getType() {
+        return mType;
+    }
+
+    public void setType(String type) {
+        this.mType = type;
     }
 }

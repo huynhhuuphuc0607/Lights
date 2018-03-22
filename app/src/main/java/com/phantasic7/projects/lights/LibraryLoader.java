@@ -89,7 +89,7 @@ public class LibraryLoader extends Application {
                         Group group = new Group(i,groupJSON.getString("name"),lights,
                                 actionJSON.getBoolean("on"), actionJSON.getInt("bri"),
                                 actionJSON.getInt("hue"), actionJSON.getInt("sat"),
-                                (float)xyJSONArray.getDouble(0),(float)xyJSONArray.getDouble(1));
+                                (float)xyJSONArray.getDouble(0),(float)xyJSONArray.getDouble(1),groupJSON.getString("class"));
                         groups.add(group);
                     }
                 } catch (JSONException e) {
@@ -128,6 +128,7 @@ public class LibraryLoader extends Application {
                     group.setSat(actionJSON.getInt("sat"));
                     group.setXCor((float)xyJSONArray.getDouble(0));
                     group.setYCor((float)xyJSONArray.getDouble(1));
+                    group.setType(groupJSON.getString("class"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -154,17 +155,30 @@ public class LibraryLoader extends Application {
         });
     }
 
-    public static void changeGroupBrightness(com.philips.lighting.hue.sdk.wrapper.domain.resource.Group group, int bri, LightState lightState)
+    public static void changeGroupName(final int groupID, final String newName)
     {
-        lightState.setBrightness(bri);
-
-        group.apply(lightState, new BridgeResponseCallback() {
+        String s = "/groups/" + groupID;
+        String s1 = "{\"name\":\"" + newName + "\"}";
+        mBridgeConnection.doPut(s, s1, new RequestCallback() {
             @Override
-            public void handleCallback(Bridge bridge, ReturnCode returnCode, List<ClipResponse> list, List<HueError> list1) {
-
+            public void onCallback(List<HueError> list, HueHTTPResponse hueHTTPResponse) {
+                Log.i(TAG, "Change to " + newName);
+                Log.i(TAG,hueHTTPResponse.getBody());
             }
         });
+    }
 
+    public static void changeGroupType(final int groupID, final String newClass)
+    {
+        String s = "/groups/" + groupID;
+        String s1 = "{\"class\":\"" + newClass + "\"}";
+        mBridgeConnection.doPut(s, s1, new RequestCallback() {
+            @Override
+            public void onCallback(List<HueError> list, HueHTTPResponse hueHTTPResponse) {
+                Log.i(TAG, "Change to " + newClass);
+                Log.i(TAG,hueHTTPResponse.getBody());
+            }
+        });
     }
 
     public static List<LightPoint> getLights(List<String> lightIds)

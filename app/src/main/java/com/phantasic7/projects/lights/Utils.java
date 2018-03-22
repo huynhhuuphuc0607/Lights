@@ -80,4 +80,5 @@ public class Utils {
         b = b <= 0.0031308f ? 12.92f * b : (1.0f + 0.055f) * (float)pow(b, (1.0f / 2.4f)) - 0.055f;
         return ColorUtils.XYZToColor(r,g,b);
     }
+
 }
