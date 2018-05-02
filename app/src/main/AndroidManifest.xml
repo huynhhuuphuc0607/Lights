@@ -18,15 +18,19 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity android:name=".BridgeEstablishingActivity">
+
+        </activity>
+        <activity android:name=".ColorControllerActivity">
+        </activity>
+        <activity android:name=".RoomEditControllerActivity">
+        </activity>
+        <activity android:name=".SplashScreenActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".ColorControllerActivity">
-        </activity>
-        <activity android:name=".RoomEditControllerActivity">
         </activity>
     </application>
 

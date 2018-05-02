@@ -32,6 +32,7 @@ import java.util.List;
  */
 
 public class LibraryLoader extends Application {
+
     static {
         // Load the huesdk native library before calling any SDK method
         System.loadLibrary("huesdk");
@@ -49,18 +50,6 @@ public class LibraryLoader extends Application {
         Persistence.setStorageLocation(getFilesDir().getAbsolutePath(), "HueQuickStart");
         HueLog.setConsoleLogLevel(HueLog.LogLevel.INFO);
 
-    }
-
-    public static void authorizeUser()
-    {
-        String s = "/lights/3/state";
-        String s1 = "{\"on\": true,\"bri\": 200}";
-        LibraryLoader.mBridgeConnection.doPut(s, s1, new RequestCallback() {
-            @Override
-            public void onCallback(List<HueError> list, HueHTTPResponse hueHTTPResponse) {
-                Log.i("Phantastic Lights", hueHTTPResponse.getBody());
-            }
-        });
     }
 
     public static List<Group> getGroups()

@@ -40,11 +40,6 @@ import java.util.List;
 
 public class BridgeEstablishingActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    static {
-        // Load the huesdk native library before calling any SDK method
-        System.loadLibrary("huesdk");
-    }
-
     private static final String TAG = "Phantastic Lights";
     //  private Bridge mBridge;
     private BridgeDiscovery mBridgeDiscovery;
@@ -75,14 +70,7 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
         timeProgressBar = findViewById(R.id.timeProgressBar);
         searchButton = findViewById(R.id.searchButton);
 
-        Persistence.setStorageLocation(getFilesDir().getAbsolutePath(), "HueQuickStart");
-        HueLog.setConsoleLogLevel(HueLog.LogLevel.INFO);
-
-        String bridgeID = getLastUsedBridgeIp();
-        if (bridgeID != null)
-            connectToBridge(bridgeID);
-        else
-            startBridgeDiscovery();
+        startBridgeDiscovery();
     }
 
     private void startBridgeDiscovery() {
@@ -263,20 +251,6 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
             mBridgeDiscovery.stop();
             mBridgeDiscovery = null;
         }
-    }
-
-    private String getLastUsedBridgeIp() {
-        List<KnownBridge> bridges = KnownBridges.getAll();
-
-        if (bridges.isEmpty())
-            return null;
-        else
-            return Collections.max(bridges, new Comparator<KnownBridge>() {
-                @Override
-                public int compare(KnownBridge a, KnownBridge b) {
-                    return a.getLastConnected().compareTo(b.getLastConnected());
-                }
-            }).getIpAddress();
     }
 
     private void updateUI(final String status) {

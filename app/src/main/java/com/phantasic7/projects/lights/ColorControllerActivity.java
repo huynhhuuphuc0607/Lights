@@ -39,7 +39,6 @@ public class ColorControllerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_controller);
-        Utils.changeStatusBarIconColor(this, true);
         colorPickerView = findViewById(R.id.colorPickerView);
         intent = getIntent();
         forGroup = intent.getBooleanExtra("group?",true);

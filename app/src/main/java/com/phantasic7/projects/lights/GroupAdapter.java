@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,6 +66,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         final SeekBar groupBrightnessSeekBar = holder.groupBrightnessSeekBar;
         final Switch groupSwitch = holder.groupSwitch;
         final TextView groupBrightnessTextView = holder.groupBrightnessTextView;
+        LinearLayout featureLinearLayout = holder.featureLinearLayout;
         final LinearLayout colorLinearLayout = holder.colorLinearLayout;
         final LinearLayout manageLinearLayout = holder.manageLinearLayout;
         LinearLayout roomEditLinearLayout = holder.roomEditLinearLayout;
@@ -178,6 +180,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         public SeekBar groupBrightnessSeekBar;
         public TextView groupBrightnessTextView;
 
+        public LinearLayout featureLinearLayout;
         public LinearLayout colorLinearLayout;
         public LinearLayout manageLinearLayout;
         public LinearLayout roomEditLinearLayout;
@@ -191,6 +194,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             groupBrightnessSeekBar = itemView.findViewById(R.id.groupBrightnessSeekBar);
             groupBrightnessTextView = itemView.findViewById(R.id.groupBrightnessTextView);
 
+            featureLinearLayout = itemView.findViewById(R.id.featureLinearLayout);
             colorLinearLayout = itemView.findViewById(R.id.colorLinearLayout);
             manageLinearLayout = itemView.findViewById(R.id.manageLinearLayout);
             roomEditLinearLayout = itemView.findViewById(R.id.roomEditLinearLayout);
