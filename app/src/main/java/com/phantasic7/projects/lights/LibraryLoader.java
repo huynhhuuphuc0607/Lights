@@ -82,7 +82,7 @@ public class LibraryLoader extends Application {
                         groups.add(group);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Error fetching data from the bridge");
                 }
             }
         });
