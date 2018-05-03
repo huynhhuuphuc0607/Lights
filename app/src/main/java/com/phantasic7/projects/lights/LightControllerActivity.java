@@ -19,7 +19,7 @@ public class LightControllerActivity extends AppCompatActivity {
 
     CircularProgressBar brightnessProgressBar;
     TextView groupNameTextView;
-    TextView sceneNameTextView;
+    TextView noOfLightsTextView;
     TextView brightnessTextView;
     AppBarLayout groupAppBarLayout;
     RecyclerView groupRecyclerView;
@@ -43,11 +43,9 @@ public class LightControllerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lightcontroller);
 
-        Utils.changeStatusBarIconColor(this, true);
-
         brightnessProgressBar = findViewById(R.id.brightnessProgressBar);
         groupNameTextView = findViewById(R.id.groupNameTextView);
-        sceneNameTextView = findViewById(R.id.sceneNameTextView);
+        noOfLightsTextView = findViewById(R.id.noOfLightsTextView);
         brightnessTextView = findViewById(R.id.brightnessTextView);
         groupAppBarLayout = findViewById(R.id.groupAppBarLayout);
         groupRecyclerView = findViewById(R.id.groupRecyclerView);
@@ -64,7 +62,6 @@ public class LightControllerActivity extends AppCompatActivity {
         lights = LibraryLoader.getLights(mGroup.getLightIds());
         size = lights.size();
         mLightState = new LightState();
-
 
         mDBHelper = new DBHelper(this);
 
@@ -83,6 +80,8 @@ public class LightControllerActivity extends AppCompatActivity {
         groupRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
         mRecyclerViewAdapter = new LightAdapter(this,R.layout.one_light_row, lights, color);
         groupRecyclerView.setAdapter(mRecyclerViewAdapter);
+        int count = lights.size();
+        noOfLightsTextView.setText(getResources().getQuantityString(R.plurals.numberOfLightsAvailable,count,count));
     }
 
     private void animateBrightnessProgressBar()

@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -29,7 +31,6 @@ public class MainControllerActivity extends AppCompatActivity {
 
     LinearLayout groupsLinearLayout;
     List<Group> groupsList;
-    DBHelper dbHelper;
     FloatingActionButton fab;
     RecyclerView groupRecyclerView;
     RecyclerView.LayoutManager mGroupRecyclerViewLayoutManager;
@@ -78,7 +79,11 @@ public class MainControllerActivity extends AppCompatActivity {
                         Toast.makeText(MainControllerActivity.this, "Add a new light bulb", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
-                        Toast.makeText(MainControllerActivity.this, "Create a group/room", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainControllerActivity.this,RoomEditControllerActivity.class);
+                        intent.putExtra("drawableRes", R.drawable.ic_living);
+                        intent.putExtra("name", "RenameYourGroup");
+                        intent.putExtra("new",true);
+                        startActivity(intent);
                         break;
                 }
                 return true;
@@ -90,13 +95,34 @@ public class MainControllerActivity extends AppCompatActivity {
             }
         });
 
-       // dbHelper = new DBHelper(this);
         groupsList = LibraryLoader.getGroups();
 
         Utils.changeStatusBarIconColor(this, true);
         groupRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mGroupAdapter = new GroupAdapter(this, R.layout.one_group_row, groupsList);
         groupRecyclerView.setAdapter(mGroupAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean isOn = false;
+        for (Group group : groupsList)
+            if (group.isOn()) {
+                isOn = true;
+                break;
+            }
+        for(Group group : groupsList) {
+            LibraryLoader.toggleGroup(group.getGroupID(), !isOn);
+            group.setOn(!isOn);
+        }
+        mGroupAdapter.notifyDataSetChanged();
+        return super.onOptionsItemSelected(item);
     }
 
     public void gotoColorController(View v) {
@@ -128,14 +154,18 @@ public class MainControllerActivity extends AppCompatActivity {
             int position = data.getIntExtra("position", 0);
             groupsList.get(position).setColor(data.getIntExtra("color", 0));
             mGroupAdapter.notifyDataSetChanged();
-        }
-        else if(requestCode == RoomEditControllerActivity.EDIT_REQUEST_CODE && resultCode == RESULT_OK)
-        {
-            int position = data.getIntExtra("position", 0);
-            groupsList.get(position).setName(data.getStringExtra("name"));
-            String type = data.getStringExtra("type");
-            if(type!=null)
-                groupsList.get(position).setType(type);
+        } else if (requestCode == RoomEditControllerActivity.EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
+            if(data.getBooleanExtra("new",false))
+            {
+                groupsList = LibraryLoader.getGroups();
+            }
+            else {
+                int position = data.getIntExtra("position", 0);
+                groupsList.get(position).setName(data.getStringExtra("name"));
+                String type = data.getStringExtra("type");
+                if (type != null)
+                    groupsList.get(position).setType(type);
+            }
             mGroupAdapter.notifyDataSetChanged();
         }
     }
@@ -148,21 +178,21 @@ public class MainControllerActivity extends AppCompatActivity {
         intent.putExtra("groupid", Integer.parseInt(minitags[1]));
         intent.putExtra("color", Integer.parseInt(minitags[3]));
         intent.putExtra("group?", true);
-        intent.putExtra("brightness",Integer.parseInt(minitags[4]));
+        intent.putExtra("brightness", Integer.parseInt(minitags[4]));
         startActivity(intent);
     }
-    public void gotoRoomEditController(View v)
-    {
+
+    public void gotoRoomEditController(View v) {
         Intent intent = new Intent(MainControllerActivity.this, RoomEditControllerActivity.class);
         String tag = (String) v.getTag();
         String[] minitags = tag.split("\\|");
         intent.putExtra("position", Integer.parseInt(minitags[0]));
         intent.putExtra("groupid", Integer.parseInt(minitags[1]));
         intent.putExtra("drawableRes", Integer.parseInt(minitags[2]));
-        intent.putExtra("name",minitags[3]);
+        intent.putExtra("name", minitags[3]);
         View view = mGroupAdapter.getCardView(Integer.parseInt(minitags[0])).findViewById(Integer.parseInt(minitags[4]));
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainControllerActivity.this,
-                Pair.create(view.findViewById(Integer.parseInt(minitags[5])),getString(R.string.transition_name_group)));
+                Pair.create(view.findViewById(Integer.parseInt(minitags[5])), getString(R.string.transition_name_group)));
 
         //noinspection RestrictedApi
         startActivityForResult(intent, RoomEditControllerActivity.EDIT_REQUEST_CODE, options.toBundle());

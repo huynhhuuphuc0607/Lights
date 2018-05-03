@@ -270,7 +270,7 @@ public class BridgeEstablishingActivity extends AppCompatActivity implements Ada
     public void searchForBridges(View v) {
         searchButton.setEnabled(false);
         searchProgressBar.setVisibility(View.VISIBLE);
-        searchTextView.setText("Searching for bridges...");
+        searchTextView.setText("Scanning for bridges...");
         brideDiscoveryListView.setAdapter(null);
         startBridgeDiscovery();
     }

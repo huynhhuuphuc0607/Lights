@@ -21,6 +21,7 @@ import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightConfigurati
 import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightPoint;
 import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 ;
@@ -35,7 +36,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     private int resID;
     private List<Group> mGroups;
     private LightState mLightState;
-    private CardView[] cardViews;
+    private List<CardView> cardViews;
     private LightConfiguration mLightConfiguration;
 
     public GroupAdapter(Context context, int resource, List<Group> groups) {
@@ -45,7 +46,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         mLightState = new LightState();
         Log.i("Phantastic Lights", "" + groups.size());
-        cardViews = new CardView[groups.size()];
+        cardViews = new ArrayList<>();
     }
 
     @Override
@@ -162,7 +163,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                 "|" + group.getName() + "|" + groupCardView.getId() + "|" + groupNameTextView.getId());
 
         try {
-            cardViews[position] = groupCardView;
+            cardViews.add(groupCardView);
         }catch (Exception e)
         {}
     }
@@ -202,12 +203,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     }
 
     public void changeDrawableResource(int position, int drawableResource) {
-        ImageView imageView = cardViews[position].findViewById(R.id.groupImageView);
+        ImageView imageView = cardViews.get(position).findViewById(R.id.groupImageView);
         imageView.setImageResource(drawableResource);
     }
 
     public CardView getCardView(int position)
     {
-        return cardViews[position];
+        return cardViews.get(position);
     }
 }

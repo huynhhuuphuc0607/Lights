@@ -89,6 +89,23 @@ public class LibraryLoader extends Application {
         return groups;
     }
 
+    public static void createNewGroup(final String name, String roomTypeName)
+    {
+
+        String s = "/groups/";
+        String s2 ="{\"name\": \"" + name+ "\",\n" +
+                "\"type\": \"Room\",\n" +
+                "\"class\": \"" + roomTypeName + "\"}";
+
+        mBridgeConnection.doPut(s, s2, new RequestCallback() {
+            @Override
+            public void onCallback(List<HueError> list, HueHTTPResponse hueHTTPResponse) {
+                Log.i(TAG,"New room/group " + name);
+                Log.i(TAG, hueHTTPResponse.getBody());
+            }
+        });
+    }
+
     public static Group getGroup(final int groupID)
     {
         String s = "/groups/" +groupID;

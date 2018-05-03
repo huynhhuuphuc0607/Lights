@@ -79,9 +79,17 @@ public class RoomEditControllerActivity extends AppCompatActivity {
     }
 
     public void applyEdit(View v) {
-        if (changed) {
-            Intent intent = new Intent(this, MainControllerActivity.class);
-            String name = newName.equals(currentName) ? currentName : newName;
+        Intent intent = new Intent(this, MainControllerActivity.class);
+        String name = newName.equals(currentName) ? currentName : newName;
+
+        if(fromMainControllerIntent.getBooleanExtra("new",false))
+        {
+            LibraryLoader.createNewGroup(newName,roomTypeName);
+            intent.putExtra("type", roomTypeName);
+            intent.putExtra("new",true);
+            setResult(RESULT_OK, intent);
+        }
+        else if (changed) {
             if (!roomTypeName.equals("")) {
                 LibraryLoader.changeGroupType(groupId, roomTypeName);
                 intent.putExtra("type", roomTypeName);

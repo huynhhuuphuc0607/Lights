@@ -4,4 +4,8 @@
     <string name="transition_name_group">GroupName</string>
     <string name="transition_name_scene">SceneName</string>
     <string name="search">Search</string>
+    <plurals name="numberOfLightsAvailable">
+        <item quantity="one">%d light</item>
+        <item quantity="other">%d lights</item>
+    </plurals>
 </resources>

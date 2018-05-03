@@ -1,13 +1,10 @@
 package com.phantasic7.projects.lights;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -44,35 +41,30 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        lightbulbImageView = findViewById(R.id.lightbulbImageView);
-        lightbulbImageView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.white_light_slide_up));
-        whiteCircleImageView = findViewById(R.id.whiteCircleImageView);
 
         Persistence.setStorageLocation(getFilesDir().getAbsolutePath(), "HueQuickStart");
         HueLog.setConsoleLogLevel(HueLog.LogLevel.INFO);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        lightbulbImageView = findViewById(R.id.lightbulbImageView);
+        whiteCircleImageView = findViewById(R.id.whiteCircleImageView);
+        lightbulbImageView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.white_light_slide_up));
+        whiteCircleImageView.startAnimation(AnimationUtils.loadAnimation(SplashScreenActivity.this,R.anim.white_spot_spread_out));
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                whiteCircleImageView.startAnimation(AnimationUtils.loadAnimation(SplashScreenActivity.this,R.anim.white_spot_scale_up));
+                String bridgeID = getLastUsedBridgeIp();
+                if (bridgeID != null)
+                    connectToBridge(bridgeID);
+                else {
+                    startActivity(new Intent(SplashScreenActivity.this, BridgeEstablishingActivity.class));
+                    finish();
+                }
             }
-        },2000);
-   //     whiteCircleImageView.startAnimation(AnimationUtils.loadAnimation(this,R.anim.spread_out));
-
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                String bridgeID = getLastUsedBridgeIp();
-//                if (bridgeID != null)
-//                    connectToBridge(bridgeID);
-//                else
-//                    startActivity(new Intent(SplashScreenActivity.this, BridgeEstablishingActivity.class));
-//            }
-//        }, 3300);
+        }, 2650);
 
     }
 
@@ -160,7 +152,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             Log.i(LibraryLoader.TAG, "Bridge state updated event: " + bridgeStateUpdatedEvent);
             switch (bridgeStateUpdatedEvent) {
                 case INITIALIZED:
-
                     startActivity(new Intent(SplashScreenActivity.this, MainControllerActivity.class));
                     finish();
                     break;
