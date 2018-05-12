@@ -106,6 +106,11 @@ public class LibraryLoader extends Application {
         });
     }
 
+    public static List<LightPoint> getLights()
+    {
+        return mBridge.getBridgeState().getLights();
+    }
+
     public static Group getGroup(final int groupID)
     {
         String s = "/groups/" +groupID;
@@ -191,7 +196,7 @@ public class LibraryLoader extends Application {
     {
         List<LightPoint>lights = new ArrayList<>();
         int size = lightIds.size();
-        for (int i = 0; i < lightIds.size(); i++)
+        for (int i = 0; i < size; i++)
             lights.add(LibraryLoader.mBridge.getBridgeState().getLightPoint(lightIds.get(i) + ""));
         return lights;
     }

@@ -7,11 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.philips.lighting.hue.sdk.wrapper.domain.BridgeState;
+import com.philips.lighting.hue.sdk.wrapper.domain.clip.Alert;
 import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightPoint;
 import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightState;
+import com.philips.lighting.hue.sdk.wrapper.domain.resource.*;
 
 import java.util.List;
 
@@ -57,6 +60,7 @@ public class LightControllerActivity extends AppCompatActivity {
         groupId = intent.getIntExtra("groupid", 0);
         mBridgeState = LibraryLoader.mBridge.getBridgeState();
         mGroup = mBridgeState.getGroup("" + groupId);
+      //  mGroup = LibraryLoader.getGroup(groupId);
         groupBrightness = intent.getIntExtra("brightness", 0);
 
         lights = LibraryLoader.getLights(mGroup.getLightIds());
@@ -92,6 +96,4 @@ public class LightControllerActivity extends AppCompatActivity {
         brightnessProgressBar.setColor(Color.WHITE);
         brightnessProgressBar.animateProgress(brightnessTextView, brightnessProgressBar.getProgress(), groupBrightness);
     }
-
-
 }
