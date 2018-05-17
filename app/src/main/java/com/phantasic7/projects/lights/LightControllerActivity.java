@@ -29,7 +29,6 @@ public class LightControllerActivity extends AppCompatActivity {
     RecyclerView.Adapter mRecyclerViewAdapter;
     RecyclerView.LayoutManager mRecyclerViewLayoutManager;
 
-    DBHelper mDBHelper;
 
     private int groupPosition;
     private int groupId;
@@ -63,11 +62,9 @@ public class LightControllerActivity extends AppCompatActivity {
       //  mGroup = LibraryLoader.getGroup(groupId);
         groupBrightness = intent.getIntExtra("brightness", 0);
 
-        lights = LibraryLoader.getLights(mGroup.getLightIds());
+        lights = LibraryLoader.getLightPoints(mGroup.getLightIds());
         size = lights.size();
         mLightState = new LightState();
-
-        mDBHelper = new DBHelper(this);
 
         groupNameTextView.setText(mGroup.getName());
       //  sceneNameTextView.setText(mDBHelper.getScene(sceneId).getName());

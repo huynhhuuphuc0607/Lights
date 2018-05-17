@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.wrapper.discovery.BridgeDiscovery;
 import com.philips.lighting.hue.sdk.wrapper.discovery.BridgeDiscoveryResult;
-import com.philips.lighting.hue.sdk.wrapper.domain.clip.Alert;
 import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightPoint;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +35,8 @@ import uk.co.markormesher.android_fab.SpeedDialMenuItem;
 public class MainControllerActivity extends AppCompatActivity {
 
     List<Group> groupsList;
+    List<LightPoint> lightsList;
+
     FloatingActionButton fab;
     RecyclerView groupRecyclerView;
     RecyclerView unreachableLightsRecyclerView;
@@ -103,9 +104,10 @@ public class MainControllerActivity extends AppCompatActivity {
             }
         });
 
+        Utils.changeStatusBarIconColor(this, true);
+
         groupsList = LibraryLoader.getGroups();
 
-        Utils.changeStatusBarIconColor(this, true);
         groupRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mGroupAdapter = new GroupAdapter(this, R.layout.one_group_row, groupsList);
         groupRecyclerView.setAdapter(mGroupAdapter);
@@ -149,10 +151,10 @@ public class MainControllerActivity extends AppCompatActivity {
     }
 
     public void loadUnreachableLights() {
-        List<LightPoint> lights = LibraryLoader.getLights();
+        lightsList = LibraryLoader.getLights();
         List<LightPoint> unreachables = new ArrayList<>();
 
-        for (LightPoint light : lights) {
+        for (LightPoint light : lightsList) {
             if (!light.getLightState().isReachable())
                 unreachables.add(light);
         }

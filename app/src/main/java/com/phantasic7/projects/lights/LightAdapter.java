@@ -46,23 +46,14 @@ public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(LightAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(LightAdapter.ViewHolder holder, final int position) {
         final LightPoint light = mLights.get(position);
 
         LinearLayout lightLinearLayout = holder.lightLinearLayout;
         lightLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final boolean isOn = light.getLightState().isOn();
                 light.updateState(light.getLightState().setAlert(Alert.SELECT));
-                Log.i(LibraryLoader.TAG, "blink blink " + light.getName() + "Before blinking: "+ isOn);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        light.getLightState().setAlert(Alert.NONE);
-                    }
-                }, 1000);
             }
         });
 

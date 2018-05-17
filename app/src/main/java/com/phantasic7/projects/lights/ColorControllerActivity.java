@@ -55,7 +55,7 @@ public class ColorControllerActivity extends AppCompatActivity {
             mBridgeState = LibraryLoader.mBridge.getBridgeState();
             mGroup = mBridgeState.getGroup("" + groupId);
 
-            lights = LibraryLoader.getLights(mGroup.getLightIds());
+            lights = LibraryLoader.getLightPoints(mGroup.getLightIds());
             size = lights.size();
             mLightState = new LightState();
         }

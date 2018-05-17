@@ -5,28 +5,24 @@ package com.phantasic7.projects.lights;
  */
 
 public class Light {
-    private String mAddress;
+    private String lightID;
     private String mName;
-    private String mGroupIDs;
+    private boolean isOn;
+    private boolean isReachable;
 
-    public Light(String address) {
-        this.mAddress = address;
-    }
-
-    public Light(String address, String name) {
-        this.mAddress = address;
-        this.mName = name;
-    }
-
-    //completed constructor
-    public Light(String address, String name, String groupIDs) {
-        mAddress = address;
+    public Light(String lightID, String name, boolean isOn, boolean isReachable) {
+        this.lightID = lightID;
         mName = name;
-        mGroupIDs = groupIDs;
+        this.isOn = isOn;
+        this.isReachable = isReachable;
     }
 
-    public String getAddress() {
-        return mAddress;
+    public String getLightID() {
+        return lightID;
+    }
+
+    public void setLightID(String lightID) {
+        this.lightID = lightID;
     }
 
     public String getName() {
@@ -34,14 +30,22 @@ public class Light {
     }
 
     public void setName(String name) {
-        this.mName = name;
+        mName = name;
     }
 
-    public String getGroupIDs() {
-        return mGroupIDs;
+    public boolean isOn() {
+        return isOn;
     }
 
-    public void setGroupIDs(String groupIDs) {
-        this.mGroupIDs = groupIDs;
+    public void setOn(boolean on) {
+        isOn = on;
+    }
+
+    public boolean isReachable() {
+        return isReachable;
+    }
+
+    public void setReachable(boolean reachable) {
+        isReachable = reachable;
     }
 }

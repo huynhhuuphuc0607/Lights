@@ -1,24 +1,17 @@
 package com.phantasic7.projects.lights;
 
 import android.app.Application;
-import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.wrapper.HueLog;
 import com.philips.lighting.hue.sdk.wrapper.Persistence;
 import com.philips.lighting.hue.sdk.wrapper.connection.BridgeConnection;
-import com.philips.lighting.hue.sdk.wrapper.connection.BridgeConnectionType;
-import com.philips.lighting.hue.sdk.wrapper.connection.BridgeResponseCallback;
-import com.philips.lighting.hue.sdk.wrapper.connection.HueHTTPRequest;
 import com.philips.lighting.hue.sdk.wrapper.connection.HueHTTPResponse;
 import com.philips.lighting.hue.sdk.wrapper.connection.RequestCallback;
 import com.philips.lighting.hue.sdk.wrapper.domain.Bridge;
 import com.philips.lighting.hue.sdk.wrapper.domain.HueError;
-import com.philips.lighting.hue.sdk.wrapper.domain.ReturnCode;
-import com.philips.lighting.hue.sdk.wrapper.domain.clip.ClipResponse;
 import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightPoint;
-import com.philips.lighting.hue.sdk.wrapper.domain.device.light.LightState;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +49,7 @@ public class LibraryLoader extends Application {
     {
         String s = "/groups";
         final List<Group> groups = new ArrayList<>();
-        LibraryLoader.mBridgeConnection.doGet(s, new RequestCallback() {
+        mBridgeConnection.doGet(s, new RequestCallback() {
             @Override
             public void onCallback(List<HueError> list, HueHTTPResponse hueHTTPResponse) {
                 Log.i("Phantastic Lights", hueHTTPResponse.getBody());
@@ -86,6 +79,7 @@ public class LibraryLoader extends Application {
                 }
             }
         });
+
         return groups;
     }
 
@@ -104,11 +98,6 @@ public class LibraryLoader extends Application {
                 Log.i(TAG, hueHTTPResponse.getBody());
             }
         });
-    }
-
-    public static List<LightPoint> getLights()
-    {
-        return mBridge.getBridgeState().getLights();
     }
 
     public static Group getGroup(final int groupID)
@@ -192,12 +181,67 @@ public class LibraryLoader extends Application {
         });
     }
 
-    public static List<LightPoint> getLights(List<String> lightIds)
+//    public static List<Light> getLights(List<String> lightIds)
+//    {
+//        List<Light>lights = getLights();
+//        List<Light> result = new ArrayList<>();
+//        for (Light light: lights)
+//            if(lightIds.contains(light.getLightID()))
+//                result.add(light);
+//
+//        return result;
+//    }
+
+    public static List<LightPoint> getLightPoints(List<String> lightIds)
     {
         List<LightPoint>lights = new ArrayList<>();
         int size = lightIds.size();
         for (int i = 0; i < size; i++)
             lights.add(LibraryLoader.mBridge.getBridgeState().getLightPoint(lightIds.get(i) + ""));
         return lights;
+    }
+    public static List<LightPoint> getLights()
+    {
+        return mBridge.getBridgeState().getLights();
+    }
+
+//    public static List<Light> getLights()
+//    {
+//        String s = "/lights";
+//        final List<Light>lights = new ArrayList<>();
+//        mBridgeConnection.doGet(s, new RequestCallback() {
+//            @Override
+//            public void onCallback(List<HueError> list, HueHTTPResponse hueHTTPResponse) {
+//                Log.i(TAG, hueHTTPResponse.getBody());
+//                try {
+//                    JSONObject jsonObject = new JSONObject(hueHTTPResponse.getBody());
+//                    int size = mBridge.getBridgeState().getLights().size() + 1;
+//                    for(int i = 1; i < size; i++) {
+//                        JSONObject lightJSONObject = jsonObject.getJSONObject(""+i);
+//                        JSONObject stateObject = lightJSONObject.getJSONObject("state");
+//                        Light light = new Light(i+"",lightJSONObject.getString("name"),
+//                                stateObject.getBoolean("on"),stateObject.getBoolean("reachable"));
+//                        lights.add(light);
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        return lights;
+//    }
+
+    public static void blinkLight(String id)
+    {
+        String s = "lights\\/"+ id +"\\/state";
+        String s1 = "{\"alert\":\"select\"}";
+
+        mBridgeConnection.doPut(s, s1, new RequestCallback() {
+            @Override
+            public void onCallback(List<HueError> list, HueHTTPResponse hueHTTPResponse) {
+                Log.i(TAG,hueHTTPResponse.getBody());
+            }
+        });
     }
 }

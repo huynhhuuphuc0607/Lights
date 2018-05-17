@@ -108,7 +108,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         if (!group.isOn())
             groupBrightnessSeekBar.setEnabled(false);
 
-        final List<LightPoint> lights = LibraryLoader.getLights(group.getLightIDs());
+        final List<LightPoint> lights = LibraryLoader.getLightPoints(group.getLightIDs());
         final int size = lights.size();
         groupBrightnessSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             LightPoint light;
