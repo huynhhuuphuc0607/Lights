@@ -53,7 +53,7 @@ public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder> 
         lightLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                light.updateState(light.getLightState().setAlert(Alert.SELECT));
+                light.updateState(light.getLightState().setAlert(Alert.NONE));
             }
         });
 
