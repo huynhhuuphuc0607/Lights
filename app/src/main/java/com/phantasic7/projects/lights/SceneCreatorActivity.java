@@ -33,6 +33,7 @@ public class SceneCreatorActivity extends AppCompatActivity {
     //Todo: For demonstration purposes only, we will use 2 checkboxes instead of a recycler view to save time
     private CheckBox checkboxGroup1;
     private CheckBox checkboxGroup2;
+    private int[] colors;
 
     private List<Group> groupsList;
 
@@ -52,9 +53,32 @@ public class SceneCreatorActivity extends AppCompatActivity {
         groupsList = new ArrayList<>();
         groupsList.add((Group)getIntent().getParcelableExtra("group 1"));
         groupsList.add((Group)getIntent().getParcelableExtra("group 2"));
+        colors = new int[]{groupsList.get(0).getColor(), groupsList.get(1).getColor()};
 
         initiateCheckBoxes();
         showBuiltInScenes();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        LightConfiguration mLightConfiguration;
+        LightState mLightState = new LightState();
+        int size = groupsList.size();
+
+        for(int i = 0; i < size; i++) {
+            List<LightPoint> lights =
+                    LibraryLoader.getLightPoints(LibraryLoader.mBridge.getBridgeState().getGroup("" + groupsList.get(i).getGroupID()).getLightIds());
+            for (LightPoint lightPoint : lights) {
+                int color = colors[i];
+
+                mLightConfiguration = lightPoint.getLightConfiguration();
+                mLightState.setXYWithColor(new HueColor(new HueColor.RGB(Color.red(color), Color.green(color), Color.blue(color)),
+                        mLightConfiguration.getModelIdentifier(),
+                        mLightConfiguration.getSwVersion()));
+                lightPoint.updateState(mLightState);
+            }
+        }
     }
 
     private void showBuiltInScenes() {

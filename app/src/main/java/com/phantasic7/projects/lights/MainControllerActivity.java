@@ -79,6 +79,7 @@ public class MainControllerActivity extends AppCompatActivity {
                         break;
                     case 2:
                         item = new SpeedDialMenuItem(context, R.drawable.scene, "Create a scene");
+                        break;
                 }
                 return item;
             }
@@ -101,6 +102,7 @@ public class MainControllerActivity extends AppCompatActivity {
                         intent2.putExtra("group 1", groupsList.get(0));
                         intent2.putExtra("group 2", groupsList.get(1));
                         startActivity(intent2);
+                        break;
                 }
                 return true;
             }
