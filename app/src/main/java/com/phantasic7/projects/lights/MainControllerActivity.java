@@ -63,7 +63,7 @@ public class MainControllerActivity extends AppCompatActivity {
         fab.setSpeedDialMenuAdapter(new SpeedDialMenuAdapter() {
             @Override
             public int getCount() {
-                return 2;
+                return 3;
             }
 
             @NotNull
@@ -77,6 +77,8 @@ public class MainControllerActivity extends AppCompatActivity {
                     case 1:
                         item = new SpeedDialMenuItem(context, R.drawable.group, "Create a group/room");
                         break;
+                    case 2:
+                        item = new SpeedDialMenuItem(context, R.drawable.scene, "Create a scene");
                 }
                 return item;
             }
@@ -94,6 +96,11 @@ public class MainControllerActivity extends AppCompatActivity {
                         intent.putExtra("new", true);
                         startActivity(intent);
                         break;
+                    case 2:
+                        Intent intent2 = new Intent(MainControllerActivity.this, SceneCreatorActivity.class);
+                        intent2.putExtra("group 1", groupsList.get(0));
+                        intent2.putExtra("group 2", groupsList.get(1));
+                        startActivity(intent2);
                 }
                 return true;
             }
@@ -117,7 +124,7 @@ public class MainControllerActivity extends AppCompatActivity {
             public void run() {
                 loadUnreachableLights();
             }
-        }, 2000);
+        }, 1500);
     }
 
     @Override

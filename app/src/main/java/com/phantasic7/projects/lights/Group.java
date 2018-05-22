@@ -1,6 +1,8 @@
 package com.phantasic7.projects.lights;
 
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.graphics.ColorUtils;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import static java.lang.Math.pow;
  * Created by HuynhHuu on 16-Feb-18.
  */
 
-public class Group {
+public class Group implements Parcelable {
     private int mGroupID;
     private String mName;
     private long mSceneID;
@@ -62,6 +64,33 @@ public class Group {
         mLightIDs = lightIDs;
         mBrightness = brightness;
     }
+
+    protected Group(Parcel in) {
+        mGroupID = in.readInt();
+        mName = in.readString();
+        mSceneID = in.readLong();
+        mLightIDs = in.createStringArrayList();
+        mBrightness = in.readInt();
+        mOn = in.readByte() != 0;
+        mHue = in.readInt();
+        mSat = in.readInt();
+        mXCor = in.readFloat();
+        mYCor = in.readFloat();
+        mColor = in.readInt();
+        mType = in.readString();
+    }
+
+    public static final Creator<Group> CREATOR = new Creator<Group>() {
+        @Override
+        public Group createFromParcel(Parcel in) {
+            return new Group(in);
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
 
     public int getGroupID() {
         return mGroupID;
@@ -163,5 +192,26 @@ public class Group {
 
     public void setType(String type) {
         this.mType = type;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mGroupID);
+        parcel.writeString(mName);
+        parcel.writeLong(mSceneID);
+        parcel.writeStringList(mLightIDs);
+        parcel.writeInt(mBrightness);
+        parcel.writeByte((byte) (mOn ? 1 : 0));
+        parcel.writeInt(mHue);
+        parcel.writeInt(mSat);
+        parcel.writeFloat(mXCor);
+        parcel.writeFloat(mYCor);
+        parcel.writeInt(mColor);
+        parcel.writeString(mType);
     }
 }

@@ -83,6 +83,7 @@ public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder> 
             lightLinearLayout = itemView.findViewById(R.id.lightLinearLayout);
             lightTextView = itemView.findViewById(R.id.lightTextView);
             lightImageView = itemView.findViewById(R.id.lightImageView);
+
         }
     }
 }
